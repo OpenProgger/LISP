@@ -31,12 +31,12 @@ Repeat these steps everytime when compiling LISP source files.
 The supported subset of LISP matches the primitives from Paul Graham's "The Roots of Lisp".
 This subset itself is only enough for self-interpretation but it provides no interaction with the OS.
 To fix this the runtime introduces 2 additional primitives to make a self-hosted code generator possible:
-- read: Reads an S-Expression and transforms to an internal representation for the compiler. Whitespaces were accepted as valid token for symbols if escaped(e.g. '\ ') except of '\n' which will be replaced with the ASCII newline(0xA).
-- print: Prints the given object according to its representation. It doesn't create a newline at the end and returns always an empty list.
+- **read**: Reads an S-Expression and transforms to an internal representation for the compiler. Whitespaces were accepted as valid token for symbols if escaped(e.g. '\ ') except of '\n' which will be replaced with the ASCII newline(0xA).
+- **print**: Prints the given object according to its representation. It doesn't create a newline at the end and returns always an empty list.
 
-The LISP compiler and it's runtime have no external dependencies except the entry point ____start___ and the syscalls read and write on Linux.
+The LISP compiler and it's runtime have no external dependencies except the entry point ____start___ and the syscalls **read** and **write** on Linux.
 For bare-metal platforms, only these 3 parts of the runtime need to be rewritten.
 
 ## Related sources
-[The Roots of Lisp](http://www.paulgraham.com/rootsoflisp.html) - Minimal primitives to eval LISP
+[The Roots of Lisp](http://www.paulgraham.com/rootsoflisp.html) - Minimal primitives to eval LISP  
 [A. Carl Douglas' Micro Lisp](https://github.com/carld/micro-lisp) - Inspiration for the parser and source evaluation of the compiler
