@@ -1,7 +1,7 @@
 # Minimal LISP Compiler
 
 This compiler translates a minimal set of LISP primitives to x86_64 assembly code.
-It requires a assembler that accepts intel syntax to create a executable.
+It requires a assembler/compiler that accepts intel syntax to create a executable.
 
 Any compiled program requires a runtime, containing primitive calls, heap initialization etc.
 Currently only a x86_64 runtime is available.
@@ -12,7 +12,7 @@ The set of supported LISP primitives are enough to provide the compiler source i
 
 First create the bootstrap compiler.
 ```
-cc compiler.c -o bootstrap
+clang compiler.c -o bootstrap
 ```
 
 Now compile the LISP source.
@@ -22,14 +22,21 @@ cat compiler.lisp | ./bootstrap > output.S
 
 Use the provided runtime to create a working binary.
 ```
-cc -static -nostartfiles -nodefaultlibs -masm=intel output.S runtime.S -o LISPC
+clang -static -nostartfiles -nodefaultlibs -masm=intel output.S runtime.S -o LISPC
+```
+
+After bootstrapping you can use the new LISPC executable to compile compiler.lisp again to verify its output is identical.
+
+```
+cat compiler.lisp | ./LISPC > output.S
+clang -static -nostartfiles -nodefaultlibs -masm=intel output.S runtime.S -o LISPC
 ```
 Repeat these steps everytime when compiling LISP source files.
 
 ## Customizations
 
 The supported subset of LISP matches the primitives from Paul Graham's "The Roots of Lisp".
-This subset itself is only enough for self-interpretation but it provides no interaction with the OS.
+This subset itself is enough for self-evaluation but it provides no interaction with the OS.
 To fix this the runtime introduces 2 additional primitives to make a self-hosted code generator possible:
 - **read**: Reads an S-Expression and transforms to an internal representation for the compiler. Whitespaces were accepted as valid token for symbols if escaped(e.g. '\ ') except of '\n' which will be replaced with the ASCII newline(0xA).
 - **print**: Prints the given object according to its representation. It doesn't create a newline at the end and returns always an empty list.

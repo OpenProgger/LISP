@@ -275,7 +275,6 @@ int compile(Object* exp, int label) {
 }
 
 int main() {
-
     // Prefix for GAS
     printf(".globl app\napp:\n");
 
